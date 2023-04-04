@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Gibspiel {
 
     /*
@@ -22,7 +24,42 @@ public class Gibspiel {
      * - Spielbrett
      */
     public static void main(String[] args) {
+        // Erster Setup für zwei menschliche Spieler
+        Scanner eingabe = new Scanner(System.in);
+        System.out.print("Name des Spieler 1: ");
+        String name = eingabe.next();
+        Spieler spieler1 = new MenschSpieler(name);
+        System.out.print("Name des Spieler 2: ");
+        name = eingabe.next();
+        Spieler spieler2 = new MenschSpieler(name);
 
+        Spielbrett spielbrett = new Spielbrett();
+        spielbrett.startSpiel();
+        while (true) {
+            System.out.print("Steine auf dem Brett: ");
+            System.out.println(spielbrett.getAktuelleAnzahlSteine());
 
+            int anzahlSteine;
+            do {
+                anzahlSteine = spieler1.steineSetzen();
+            } while ( ! spielbrett.macheZug( anzahlSteine ) );
+
+            if (spielbrett.hatGewonnen()) {
+                System.out.println(spieler1.getName() + " hat gewonnen");
+                break;
+            }
+
+            System.out.print("Steine auf dem Brett: ");
+            System.out.println(spielbrett.getAktuelleAnzahlSteine());
+
+            do {
+                anzahlSteine = spieler2.steineSetzen();
+            } while ( ! spielbrett.macheZug( anzahlSteine ) );
+
+            if (spielbrett.hatGewonnen()) {
+                System.out.println(spieler2.getName() + " hat gewonnen");
+                break;
+            }
+        }
     }
 }
