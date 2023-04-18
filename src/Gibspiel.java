@@ -28,16 +28,15 @@ public class Gibspiel {
     private static final Scanner eingabe = new Scanner(System.in);
     private static final Spieler[] spieler = new Spieler[2];
 
-    private static void spielerAnzahlAuswahl() {
+    private static void spielerAnzahlAuswahl(Spielbrett spielbrett) {
         int anzahlSpieler;
         do {
             System.out.print("Wieviele menschliche Spieler (0-2)? ");
             anzahlSpieler = eingabe.nextInt();
         } while (anzahlSpieler < 0 || anzahlSpieler > 2);
         for (int i=0; i<2; i++) {
-            if (i > anzahlSpieler) {
-                //spieler[i] = new ComputerSpieler();
-                System.out.println("Sorry, noch nicht implementiert");
+            if (i >= anzahlSpieler) {
+                spieler[i] = new ComputerSpieler(spielbrett);
             }
             else {
                 System.out.print("Name des Spieler " + (i+1) + ": ");
@@ -48,10 +47,10 @@ public class Gibspiel {
     }
 
     public static void main(String[] args) {
-        spielerAnzahlAuswahl();
+        Spielbrett spielbrett = new Spielbrett();
+        spielerAnzahlAuswahl(spielbrett);
 
         int aktuellerSpieler = 0;
-        Spielbrett spielbrett = new Spielbrett();
         spielbrett.startSpiel();
         while (true) {
             System.out.print("Steine auf dem Brett: ");
