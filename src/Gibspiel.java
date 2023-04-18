@@ -33,14 +33,18 @@ public class Gibspiel {
         do {
             System.out.print("Wieviele menschliche Spieler (0-2)? ");
             anzahlSpieler = eingabe.nextInt();
+            eingabe.nextLine();
         } while (anzahlSpieler < 0 || anzahlSpieler > 2);
         for (int i=0; i<2; i++) {
             if (i >= anzahlSpieler) {
-                spieler[i] = new ComputerSpieler(spielbrett);
+                if (i==0)
+                    spieler[i] = new ComputerSpielerSchwer(spielbrett);
+                else
+                    spieler[i] = new ComputerSpieler_PD(spielbrett);
             }
             else {
                 System.out.print("Name des Spieler " + (i+1) + ": ");
-                String name = eingabe.next();
+                String name = eingabe.nextLine();
                 spieler[i] = new MenschSpieler(name);
             }
         }

@@ -2,7 +2,7 @@ public class ComputerSpieler extends Spieler {
     private Spielbrett spielbrett;
 
     public ComputerSpieler(Spielbrett spielbrett) {
-        super("Computer");
+        super("Computer " + (int)(Math.random() * 100));
         this.spielbrett = spielbrett;
     }
 
@@ -12,7 +12,7 @@ public class ComputerSpieler extends Spieler {
         if (restlicheSteine > 10)
             restlicheSteine = (int)(Math.random() * 10) + 1;
 
-        System.out.println("Computer spielt " + restlicheSteine + " Steine.");
+        System.out.println(getName() +  " spielt " + restlicheSteine + " Steine.");
         return restlicheSteine;
     }
 }
