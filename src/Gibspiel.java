@@ -23,43 +23,60 @@ public class Gibspiel {
      *   - ComputerSpieler
      * - Spielbrett
      */
-    public static void main(String[] args) {
-        // Erster Setup für zwei menschliche Spieler
-        Scanner eingabe = new Scanner(System.in);
-        System.out.print("Name des Spieler 1: ");
-        String name = eingabe.next();
-        Spieler spieler1 = new MenschSpieler(name);
-        System.out.print("Name des Spieler 2: ");
-        name = eingabe.next();
-        Spieler spieler2 = new MenschSpieler(name);
 
+    // geteilte Variablen (Attribute, statisch -> globale Variable)
+    private static final Scanner eingabe = new Scanner(System.in);
+    private static final Spieler[] spieler = new Spieler[2];
+
+    private static void spielerAnzahlAuswahl() {
+        int anzahlSpieler;
+        do {
+            System.out.print("Wieviele menschliche Spieler (0-2)? ");
+            anzahlSpieler = eingabe.nextInt();
+        } while (anzahlSpieler < 0 || anzahlSpieler > 2);
+        for (int i=0; i<2; i++) {
+            if (i > anzahlSpieler) {
+                //spieler[i] = new ComputerSpieler();
+                System.out.println("Sorry, noch nicht implementiert");
+            }
+            else {
+                System.out.print("Name des Spieler " + (i+1) + ": ");
+                String name = eingabe.next();
+                spieler[i] = new MenschSpieler(name);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        spielerAnzahlAuswahl();
+
+        int aktuellerSpieler = 0;
         Spielbrett spielbrett = new Spielbrett();
         spielbrett.startSpiel();
         while (true) {
             System.out.print("Steine auf dem Brett: ");
             System.out.println(spielbrett.getAktuelleAnzahlSteine());
 
+            boolean gültigerZug = false;
             int anzahlSteine;
             do {
-                anzahlSteine = spieler1.steineSetzen();
-            } while ( ! spielbrett.macheZug( anzahlSteine ) );
+                anzahlSteine = spieler[aktuellerSpieler].steineSetzen();
+                gültigerZug = spielbrett.macheZug( anzahlSteine );
+                if ( ! gültigerZug )
+                    System.out.println("Ungültiger Zug, bitte nochmal versuchen!");
+            } while ( ! gültigerZug );
 
             if (spielbrett.hatGewonnen()) {
-                System.out.println(spieler1.getName() + " hat gewonnen");
+                System.out.println(spieler[aktuellerSpieler].getName()
+                        + " hat gewonnen");
                 break;
             }
 
-            System.out.print("Steine auf dem Brett: ");
-            System.out.println(spielbrett.getAktuelleAnzahlSteine());
-
-            do {
-                anzahlSteine = spieler2.steineSetzen();
-            } while ( ! spielbrett.macheZug( anzahlSteine ) );
-
-            if (spielbrett.hatGewonnen()) {
-                System.out.println(spieler2.getName() + " hat gewonnen");
-                break;
-            }
+            // wechsel zwischen 0 und 1
+            aktuellerSpieler = 1 - aktuellerSpieler;
+            // das gleiche wie:
+//            aktuellerSpieler++;
+//            if (aktuellerSpieler >= 2) aktuellerSpieler = 0;
         }
     }
 }
